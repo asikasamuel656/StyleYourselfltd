@@ -1,8 +1,10 @@
 import { motion } from "framer-motion";
 import { FaTag } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 import img5 from "../assets/img5.jpg";
 import img4 from "../assets/img4.jpg";
+import Baggy from "../assets/Baggy.jpg";
 
 const Sale = () => {
 
@@ -24,10 +26,10 @@ const Sale = () => {
     },
     {
       id: 3,
-      name: "Casual Fit",
-      price: 60,
-      discount: 15,
-      image: img5,
+      name: "Casual Baggy",
+      price: 75,
+      discount: 10,
+      image: Baggy,
     },
   ];
 
@@ -96,16 +98,19 @@ const Sale = () => {
 
                 <div className="flex items-center gap-3 mt-2">
                   <span className="text-gray-400 line-through">
-                    ${item.price}
+                    NGN{item.price}
                   </span>
                   <span className="text-lg font-bold text-amber-500">
-                    ${discountedPrice.toFixed(2)}
+                    NGN{discountedPrice.toFixed(2)}
                   </span>
                 </div>
 
-                <button className="mt-4 w-full bg-amber-500 text-white py-2 rounded-xl font-semibold hover:bg-amber-600 transition">
-                  Shop Now
-                </button>
+               <Link
+                to="/shop"
+                className="mt-4 block w-full bg-amber-500 text-white py-2 rounded-xl font-semibold hover:bg-amber-600 transition text-center"
+              >
+                Shop Now
+              </Link>
               </div>
             </motion.div>
           );

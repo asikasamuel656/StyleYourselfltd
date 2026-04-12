@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaChevronRight } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 import hero4 from "../assets/hero1.jpg";
 import hero6 from "../assets/hero3.jpg";

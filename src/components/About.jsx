@@ -109,9 +109,10 @@ const About = () => {
             className="pt-6 flex flex-col sm:flex-row gap-4 sm:items-center"
           >
             <motion.a
+              href="#Contact"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="group inline-flex justify-center items-center gap-3 text-white bg-amber-500 px-7 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-amber-600 hover:shadow-xl w-full sm:w-auto"
+              className="group inline-flex justify-center items-center gap-3 text-white bg-amber-500 px-7 py-3 rounded-xl font-semibold"
             >
               Contact Us
               <FaChevronRight className="transition-transform duration-300 group-hover:translate-x-2" />

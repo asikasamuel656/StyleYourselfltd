@@ -1,15 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import Shop from './pages/Shop'
-import App from "./App";
+import App from "./App.jsx";
+import { StoreProvider } from "./context/StoreContext.jsx";
 import "./index.css";
-import { BrowserRouter, HashRouter } from 'react-router-dom'
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <HashRouter>
+    <StoreProvider>
       <App />
-      <Shop />
-    </HashRouter>
+    </StoreProvider>
   </React.StrictMode>
 );

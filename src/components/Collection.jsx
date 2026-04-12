@@ -46,6 +46,8 @@ const Collection = () => {
     carouselRef.current?.scrollBy({ left: 300, behavior: "smooth" });
   };
 
+  const MotionLink = motion.create(Link);
+
   return (
     <section
       id="Collection"
@@ -139,14 +141,15 @@ const Collection = () => {
         transition={{ delay: 0.2 }}
         className="flex justify-center mt-10"
       >
-        <motion.button
+        <MotionLink
+          to="/shop"
           whileHover={{ scale: 1.08 }}
           whileTap={{ scale: 0.95 }}
-          className="group inline-flex items-center gap-3 text-white bg-amber-500 px-7 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-amber-600 hover:shadow-xl"
+          className="group inline-flex items-center gap-3 text-white bg-amber-500 px-7 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-amber-600 hover:shadow-xl cursor-pointer"
         >
           Shop Now
           <FaChevronRight className="transition-transform duration-300 group-hover:translate-x-2" />
-        </motion.button>
+        </MotionLink>
       </motion.div>
     </section>
   );
