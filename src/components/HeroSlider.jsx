@@ -1,173 +1,203 @@
 import { useState, useEffect, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { FaChevronRight } from "react-icons/fa";
+import { AnimatePresence, motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
-import hero4 from "../assets/hero1.jpg";
-import hero6 from "../assets/hero3.jpg";
-import hero7 from "../assets/hero2.jpg";
+// ── Showroom photography ──
+// Drop the source files into src/assets and rename to match (or edit the
+// paths below). These are the real Style Yourself showroom + product shots.
+import showroomWide from "../assets/showroom-wide1.jpg";     // full boutique, wall of shoes + mannequin (IMG_7518)
+import mannequinPolo from "../assets/mannequin-polo.jpg";   // striped polo mannequin close (IMG_7514 crop / IMG_7490)
+import rails from "../assets/rails.jpg";                    // clothing rails, green jacket run (IMG_7516)
+import loungeCorner from "../assets/lounge-corner.jpg";      // teal sofa + gold wordmark wall (IMG_7557)
+import luggageWall from "../assets/luggage-wall.jpg";        // suitcase display (IMG_7505 / IMG_7514)
+import product from "../assets/Product.jpg"
+const MotionLink = motion.create(Link);
 
 const slides = [
   {
-    id: 1,
-    title: "Discover Your Perfect Style",
-    content:
-      "Step into elegance with our latest boutique collections. From trendy outfits to timeless classics, find styles that make you stand out wherever you go.",
-    image: hero7,
-    ctaText: "Shop Now",
-    ctaLink: "#",
+    id: "showroom",
+    image: showroomWide,
+    eyebrow: "Abuja Showcase",
+    title: "Style Yourself",
+    line: "Luxury menswear, footwear and travel — curated under one roof.",
+    ctaText: "Explore The Shop",
+    ctaLink: "/shop",
   },
   {
-    id: 2,
-    title: "New Arrivals Just For You",
-    content:
-      "Stay ahead of fashion with our newest arrivals. Fresh styles, premium fabrics, and designs carefully selected to upgrade your wardrobe.",
-    image: hero6,
-    ctaText: "View Collection",
-    ctaLink: "#",
+    id: "tailoring",
+    image: product,
+    eyebrow: "New Season",
+    title: "Dress With Intention",
+    line: "Considered pieces built for men who own the room they walk into.",
+    ctaText: "View Collections",
+    ctaLink: "/Collection",
   },
   {
-    id: 3,
-    title: "Upgrade Your Wardrobe Today",
-    content:
-      "Explore stylish outfits that boost your confidence and express your personality.",
-    image: hero4,
-    ctaText: "Start Shopping",
-    ctaLink: "#",
-  }
+    id: "rails",
+    image: rails,
+    eyebrow: "Just Landed",
+    title: "New Arrivals",
+    line: "The latest drops to enter the Style Yourself wardrobe.",
+    ctaText: "Shop New In",
+    ctaLink: "/shop?filter=new",
+  },
+  {
+    id: "lounge",
+    image: luggageWall,
+    eyebrow: "In-Store & Virtual",
+    title: "Book A Styling Session",
+    line: "Tell us the occasion, your budget and your taste — we'll do the rest.",
+    ctaText: "Book A Consultation",
+    ctaLink: "/styling",
+  },
+  {
+    id: "travel",
+    image: loungeCorner,
+    eyebrow: "Travel Edit",
+    title: "Built To Move",
+    line: "Hard-shell luggage and travel accessories for the well-dressed departure.",
+    ctaText: "Shop Travel",
+    ctaLink: "/shop?category=Travel",
+  },
 ];
 
-// 🔥 container (stagger)
-const containerVariants = {
-  animate: {
-    transition: {
-      staggerChildren: 0.2,
-    },
-  },
-};
-
-// 🔥 text animation
-const itemVariants = {
-  initial: { y: 40, opacity: 0 },
-  animate: { y: 0, opacity: 1 },
-  exit: { y: -40, opacity: 0 },
-};
+const AUTOPLAY_MS = 6000;
 
 export default function HeroSlider() {
-  const [currentSlide, setCurrentSlide] = useState(0);
+  const [index, setIndex] = useState(0);
+  const [paused, setPaused] = useState(false);
 
-  const nextSlide = useCallback(() => {
-    setCurrentSlide((prev) => (prev + 1) % slides.length);
-  }, []);
-
-  const prevSlide = useCallback(() => {
-    setCurrentSlide((prev) =>
-      prev === 0 ? slides.length - 1 : prev - 1
-    );
-  }, []);
+  const next = useCallback(() => setIndex((i) => (i + 1) % slides.length), []);
+  const prev = useCallback(() => setIndex((i) => (i - 1 + slides.length) % slides.length), []);
 
   useEffect(() => {
-    const interval = setInterval(nextSlide, 6000);
-    return () => clearInterval(interval);
-  }, [nextSlide]);
+    if (paused) return;
+    const t = setInterval(next, AUTOPLAY_MS);
+    return () => clearInterval(t);
+  }, [next, paused]);
+
+  const slide = slides[index];
 
   return (
-    <section className="relative w-full min-h-[90vh] lg:h-screen overflow-hidden bg-black">
-
-      {/* 🔥 Background with cinematic zoom */}
+    <section
+      id="HeroSlider"
+      className="relative w-full h-[92vh] min-h-[560px] overflow-hidden bg-[#0E0E10]"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
+      {/* Background photography with slow Ken-Burns drift */}
       <AnimatePresence mode="wait">
-        <motion.img
-          key={slides[currentSlide].id}
-          src={slides[currentSlide].image}
-          alt=""
-          className="absolute inset-0 w-full h-full object-cover"
-          initial={{ opacity: 0, scale: 1.2 }}
-          animate={{ opacity: 1, scale: 1 }}
+        <motion.div
+          key={slide.id}
+          className="absolute inset-0"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 1.2, ease: "easeOut" }}
-        />
+          transition={{ duration: 1, ease: "easeInOut" }}
+        >
+          <motion.img
+            src={slide.image}
+            alt=""
+            className="w-full h-full object-cover"
+            initial={{ scale: 1 }}
+            animate={{ scale: 1.08 }}
+            transition={{ duration: AUTOPLAY_MS / 1000 + 1, ease: "linear" }}
+          />
+        </motion.div>
       </AnimatePresence>
 
-      {/* Overlay */}
-      <div className="absolute inset-0 bg-black/60" />
+      {/* Editorial gradient — darker left/bottom where copy sits */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/10" />
+      <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/10 to-transparent" />
 
-      {/* 🔥 Content */}
-      <div className="absolute inset-0 z-10 flex items-center justify-center px-6 text-center">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={slides[currentSlide].title}
-            variants={containerVariants}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-            className="max-w-2xl"
-          >
-            <motion.h1
-              variants={itemVariants}
-              transition={{ duration: 0.6 }}
-              className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6"
+      {/* Copy block */}
+      <div className="relative z-10 h-full flex items-end md:items-center">
+        <div className="w-full max-w-7xl mx-auto px-6 md:px-12 pb-20 md:pb-0">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={slide.id}
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -16 }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
+              className="max-w-xl"
             >
-              {slides[currentSlide].title}
-            </motion.h1>
+              <div className="flex items-center gap-3 mb-5">
+                <span className="w-8 h-px bg-[#C9A24B]" />
+                <span className="text-[#C9A24B] text-xs font-semibold tracking-[0.22em] uppercase">
+                  {slide.eyebrow}
+                </span>
+              </div>
 
-            <motion.p
-              variants={itemVariants}
-              transition={{ duration: 0.6 }}
-              className="text-gray-200 text-sm sm:text-base md:text-lg mb-8"
-            >
-              {slides[currentSlide].content}
-            </motion.p>
+              <h1
+                className="text-white text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.05] mb-6"
+                style={{ fontFamily: "'Playfair Display', serif" }}
+              >
+                {slide.title}
+              </h1>
 
-            <motion.a
-              variants={itemVariants}
-              whileHover={{ scale: 1.08 }}
-              whileTap={{ scale: 0.95 }}
-              href={slides[currentSlide].ctaLink}
-              className="group inline-flex items-center gap-3 text-white bg-amber-500 px-7 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-amber-600 hover:shadow-xl"
-            >
-              {slides[currentSlide].ctaText}
-              <FaChevronRight className="transition-transform duration-300 group-hover:translate-x-2" />
-            </motion.a>
-          </motion.div>
-        </AnimatePresence>
+              <p className="text-neutral-200/90 text-base md:text-lg mb-9 max-w-md font-light">
+                {slide.line}
+              </p>
+
+              <MotionLink
+                to={slide.ctaLink}
+                transition={{ duration: 0.3 }}
+                whileHover={{ scale: 1.08 }}
+                whileTap={{ scale: 0.95 }}
+                className="group inline-flex items-center gap-3 text-white bg-amber-500 px-7 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-amber-600 hover:shadow-xl"
+              >
+                {slide.ctaText}
+                <FaChevronRight size={11} />
+              </MotionLink>
+            </motion.div>
+          </AnimatePresence>
+        </div>
       </div>
 
-      {/* 🔥 Indicators */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-3 z-20">
-        {slides.map((slide, index) => (
-          <motion.button
+      {/* Slide index, editorial style (bottom-right) */}
+      <div className="absolute bottom-8 right-6 md:right-12 z-20 flex items-center gap-4 text-white/70 text-xs tracking-widest">
+        <span className="text-white font-semibold">{String(index + 1).padStart(2, "0")}</span>
+        <span className="w-10 h-px bg-white/30 relative overflow-hidden">
+          <motion.span
             key={slide.id}
-            onClick={() => setCurrentSlide(index)}
-            animate={{
-              scale: currentSlide === index ? 1.3 : 1,
-              opacity: currentSlide === index ? 1 : 0.5,
-            }}
-            className="w-2.5 h-2.5 rounded-full bg-white"
+            className="absolute inset-y-0 left-0 bg-[#C9A24B]"
+            initial={{ width: "0%" }}
+            animate={{ width: "100%" }}
+            transition={{ duration: AUTOPLAY_MS / 1000, ease: "linear" }}
+          />
+        </span>
+        <span>{String(slides.length).padStart(2, "0")}</span>
+      </div>
+
+      {/* Arrows */}
+      <button
+        onClick={() => { setPaused(true); prev(); }}
+        aria-label="Previous slide"
+        className="hidden md:flex absolute left-6 top-1/2 -translate-y-1/2 z-20 w-11 h-11 items-center justify-center rounded-full border border-white/25 text-white/80 hover:border-[#C9A24B] hover:text-[#C9A24B] transition-colors"
+      >
+        <FaChevronLeft size={13} />
+      </button>
+      <button
+        onClick={() => { setPaused(true); next(); }}
+        aria-label="Next slide"
+        className="hidden md:flex absolute right-6 top-1/2 -translate-y-1/2 z-20 w-11 h-11 items-center justify-center rounded-full border border-white/25 text-white/80 hover:border-[#C9A24B] hover:text-[#C9A24B] transition-colors"
+      >
+        <FaChevronRight size={13} />
+      </button>
+
+      {/* Dots (mobile-friendly, also present on desktop under copy on small screens) */}
+      <div className="absolute bottom-8 left-6 md:hidden flex gap-2 z-20">
+        {slides.map((s, i) => (
+          <button
+            key={s.id}
+            onClick={() => { setPaused(true); setIndex(i); }}
+            className={`h-1.5 rounded-full transition-all ${i === index ? "w-6 bg-[#C9A24B]" : "w-1.5 bg-white/40"}`}
+            aria-label={`Go to slide ${i + 1}`}
           />
         ))}
       </div>
-
-      {/* 🔥 Arrows */}
-      <motion.button
-        whileHover={{ scale: 1.2 }}
-        whileTap={{ scale: 0.9 }}
-        onClick={prevSlide}
-        className="absolute left-3 md:left-6 top-1/2 -translate-y-1/2
-        bg-white/20 text-white p-2 md:p-3 rounded-full backdrop-blur"
-      >
-        ◀
-      </motion.button>
-
-      <motion.button
-        whileHover={{ scale: 1.2 }}
-        whileTap={{ scale: 0.9 }}
-        onClick={nextSlide}
-        className="absolute right-3 md:right-6 top-1/2 -translate-y-1/2
-        bg-white/20 text-white p-2 md:p-3 rounded-full backdrop-blur"
-      >
-        ▶
-      </motion.button>
-
     </section>
   );
-};
+}

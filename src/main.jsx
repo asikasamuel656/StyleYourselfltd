@@ -1,13 +1,17 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App.jsx";
-import { StoreProvider } from "./context/StoreContext.jsx";
+import App from "./App";
 import "./index.css";
 
+import "./lib/posthog";
+
+import { ThemeProvider } from "./context/ThemeContext";
+import { StoreProvider } from "./context/StoreContext";
+
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
+  <ThemeProvider>
     <StoreProvider>
       <App />
     </StoreProvider>
-  </React.StrictMode>
+  </ThemeProvider>
 );

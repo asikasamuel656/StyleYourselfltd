@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="icon" href="./src/assets/StyleYourself.jpg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title style="font-family: Verdana, Geneva, Tahoma, sans-serif;">StyleYourself - Fashion Store</title>
   </head>
@@ -11,3 +11,19 @@
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
+<!-- {/* Dark Mode Toggle */}
+<div className="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
+  <span className="text-sm font-medium text-gray-700">Dark Mode</span>
+  <button
+    onClick={() => setDarkMode(!darkMode)}
+    className={`relative w-12 h-6 rounded-full transition-colors duration-300 ${
+      darkMode ? "bg-amber-400" : "bg-gray-200"
+    }`}
+  >
+    <span
+      className={`absolute top-1 left-1 w-4 h-4 bg-white rounded-full shadow transition-transform duration-300 ${
+        darkMode ? "translate-x-6" : "translate-x-0"
+      }`}
+    />
+  </button>
+</div> -->
